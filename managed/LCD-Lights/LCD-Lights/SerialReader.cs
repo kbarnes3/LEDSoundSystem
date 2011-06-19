@@ -12,6 +12,7 @@ namespace LCD_Lights
 		private Form1 myForm;
 		private SerialPort myPort;
 		private bool myfCancelled = false;
+		Thread myThread;
 
 		public SerialReader(Form1 theForm)
 		{
@@ -20,14 +21,15 @@ namespace LCD_Lights
 
 		public void Start()
 		{
-			Thread readThread = new Thread(new ThreadStart(ThreadFunction));
+			myThread = new Thread(new ThreadStart(ThreadFunction));
 			myfCancelled = false;
-			readThread.Start();
+			myThread.Start();
 		}
 
 		public void Stop()
 		{
 			myfCancelled = true;
+			myThread.Join();
 		}
 
 		private void ThreadFunction()
@@ -51,10 +53,7 @@ namespace LCD_Lights
 					myForm.myrgLightValues[i] = lightValue;
 				}
 
-				if (!myfCancelled)
-				{
-					myForm.Invoke(myForm.myUpdateLights);
-				}
+				myForm.BeginInvoke(myForm.myUpdateLights);
 			}
 
 			myPort.Close();
