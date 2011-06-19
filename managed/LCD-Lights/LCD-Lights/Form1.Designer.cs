@@ -28,12 +28,23 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
+			this.SuspendLayout();
+			// 
+			// Form1
+			// 
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Text = "Form1";
+			this.ClientSize = new System.Drawing.Size(584, 562);
+			this.Name = "Form1";
+			this.Text = "LCD Lights";
+			this.Load += new System.EventHandler(this.Form1_Load);
+			this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
+			this.ResumeLayout(false);
+
 		}
 
 		#endregion
+
 	}
 }
 
