@@ -37,6 +37,7 @@
 			this.ClientSize = new System.Drawing.Size(584, 562);
 			this.Name = "Form1";
 			this.Text = "LCD Lights";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
 			this.ResumeLayout(false);
