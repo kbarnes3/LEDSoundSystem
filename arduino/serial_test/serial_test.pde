@@ -31,7 +31,7 @@ void loop()
             rgBands[6]);
 
     Serial.println(szOutput);
-    delay(1000);
+    delay(50);
 }
 
 void IncrementValue()
