@@ -52,6 +52,8 @@ void SampleSpectrum()
 
 int ReadBand(int iBand)
 {
+    int rawValue = 0;
+
     if (iBand < 0)
     {
         return -1;
@@ -61,6 +63,47 @@ int ReadBand(int iBand)
         return -1;
     }
 
-    return rgSpectrum[iBand];
+    rawValue = rgSpectrum[iBand];
+
+    if (rawValue < 100)
+    {
+        return 0;
+    }
+    if (rawValue < 200)
+    {
+        return 1;
+    }
+    else if (rawValue < 300)
+    {
+        return 2;
+    }
+    else if (rawValue < 400)
+    {
+        return 3;
+    }
+    else if (rawValue < 500)
+    {
+        return 4;
+    }
+    else if (rawValue < 600)
+    {
+        return 5;
+    }
+    else if (rawValue < 700)
+    {
+        return 6;
+    }
+    else if (rawValue < 800)
+    {
+        return 7;
+    }
+    else if (rawValue < 900)
+    {
+        return 8;
+    }
+    else
+    {
+        return 9;
+    }
 }
 

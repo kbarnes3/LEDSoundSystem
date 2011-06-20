@@ -11,20 +11,24 @@ void setup()
 
 void loop()
 {
+    char szBuffer[c_cBands + 1] = {};
+    int rgValues[c_cBands] = {};
     SampleSpectrum();
 
     for(byte iBand = 0; iBand < c_cBands; iBand++)
     {
-        char szBuffer[50] = {};
-        int bandValue = 0;
-
-        bandValue = ReadBand(iBand);
-        sprintf(szBuffer, "Band: %d, Value: %d", iBand, bandValue);
-        Serial.println(szBuffer);
+        rgValues[iBand] = ReadBand(iBand);
     }
 
-    Serial.println("--------------------");
+    sprintf(szBuffer, "%d%d%d%d%d%d%d",
+            rgValues[0],
+            rgValues[1],
+            rgValues[2],
+            rgValues[3],
+            rgValues[4],
+            rgValues[5],
+            rgValues[6]);
 
-    delay(1000);
+    Serial.println(szBuffer);
 }
 
