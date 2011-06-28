@@ -13,6 +13,5 @@ const byte c_cBands = 7;
 #define SPECTRUM_BAND_7     64
 
 void SetupSpectrum();
-void SampleSpectrum(unsigned long * piLow, unsigned long * piHigh);
 void SampleSpectrum(byte spectrumFlags, unsigned long results[c_cBands]);
 

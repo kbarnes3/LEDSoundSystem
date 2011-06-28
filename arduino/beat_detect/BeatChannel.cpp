@@ -4,6 +4,8 @@
 const float c_FullBeatFactor = 1.3;
 const float c_MinBeatFactor = 1.2;
 
+const unsigned long c_minEnergy = 12*12;
+
 CBeatChannel::CBeatChannel(byte pin, byte spectrumFlags)
 {
     _pin = pin;
@@ -56,11 +58,11 @@ void CBeatChannel::AddSample(unsigned long energy, bool fEndBeat)
         float beatFactor = (float)_beatEnergySum / historyAvg;
         LightState state = Light_Off;
         
-        if (beatFactor >= c_MinBeatFactor)
+        if ( (beatFactor > c_MinBeatFactor) &&
+            (AvgBeatEnergy() >= c_minEnergy) )
         {
-            state = (beatFactor >= c_FullBeatFactor) ? Light_Bright : Light_Dim;
+            state = (beatFactor > c_FullBeatFactor) ? Light_Bright : Light_Dim;
         }
-        
         
         UpdateDisplay(state);
         
@@ -85,40 +87,8 @@ void CBeatChannel::AddSample(unsigned long energy, bool fEndBeat)
 void CBeatChannel::UpdateDisplay(LightState lightStateNew)
 {
     if (lightStateNew != _lightState)
-    {
+    {        
         analogWrite(_pin, lightStateNew);
         _lightState = lightStateNew;
     }
 }
-
-/*
-void CBeatChannel::UpdateDisplay(bool fPeak)
-{
-    if (fPeak)
-    {
-        if (!_fBeatOn)
-        {
-            // New beat
-            //Serial.println("1");
-            //Serial.write((byte)1);
-            
-            analogWrite(_pin, 255);
-        
-            _fBeatOn = true;
-        }
-    }
-    else
-    {
-        if (_fBeatOn)
-        {
-            // Turn beat off
-            //Serial.println("0");
-            //Serial.write((byte)0);
-            
-            analogWrite(_pin, 0);
-        
-            _fBeatOn = false;
-        }
-    }
-}
-*/
