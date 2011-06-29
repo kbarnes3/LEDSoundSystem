@@ -35,10 +35,10 @@ void SetupSpectrum()
 
 unsigned long ReadBandEnergy()
 {
-    int left  = analogRead(c_apinSpectrumLeft);
+    unsigned long left  = analogRead(c_apinSpectrumLeft);
     left *= c_energyScale;
     
-    int right = analogRead(c_apinSpectrumRight);
+    unsigned long right = analogRead(c_apinSpectrumRight);
     right *= c_energyScale;
     
     unsigned long energyOut = (left*left) + (right*right);
@@ -72,33 +72,6 @@ void SampleSpectrum(byte spectrumFlags, unsigned long results[c_cBands])
         
         GoToNextBand();
     }
-}
-
-void SampleSpectrum(unsigned long * piLow, unsigned long * piHigh)
-{
-    unsigned long lowEnergy = 0;
-    unsigned long highEnergy = 0;
-   
-    for (byte iBand = 0; iBand < 2; iBand++)
-    {
-        lowEnergy += (unsigned int)ReadBandEnergy();
-        
-        GoToNextBand();
-    }
-    
-    lowEnergy = lowEnergy / 2;
-    
-    for (byte iBand = 0; iBand < 5; iBand++)
-    {
-        highEnergy += ReadBandEnergy();
-        
-        GoToNextBand();
-    }
-    
-    highEnergy = highEnergy / 5;
-    
-    *piLow =  lowEnergy;
-    *piHigh = highEnergy; 
 }
 
 

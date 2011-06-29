@@ -23,6 +23,8 @@ private:
     };
 
     void UpdateDisplay(LightState lightState);
+    
+    unsigned long AvgBeatEnergy() { return (_beatEnergySum/_beatSampleCount); }
 
     // data
     unsigned long _history[c_HistorySize]; // history of previous beats
