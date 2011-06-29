@@ -5,11 +5,10 @@
 #include "BeatChannel.h"
 
 // Constants
-const unsigned int c_ReadsPerSecond = 512;
 const unsigned int c_SampleInstance = 50000; // micro-seconds (5/100 of a second)
-const float c_SampleInterval = (1000000/c_ReadsPerSecond);
 
-const byte c_SpectrumFlagsAll = 127;
+const byte c_SpectrumFlagsAll = SPECTRUM_BAND_1 | SPECTRUM_BAND_2 | SPECTRUM_BAND_3 |
+    SPECTRUM_BAND_4 | SPECTRUM_BAND_5 | SPECTRUM_BAND_6 | SPECTRUM_BAND_7;
 
 const bool fDebugMode = false;
 
@@ -22,6 +21,7 @@ CBeatChannel beatChanArray[] =
     CBeatChannel(6, (SPECTRUM_BAND_4 | SPECTRUM_BAND_5)),
 };
 
+const byte c_cBeatChanArray = sizeof(beatChanArray) / sizeof(CBeatChannel);
 
 void setup()
 {
@@ -47,15 +47,13 @@ void loop()
     
     bool fEndBeat = (elapsedTime >= c_SampleInstance);
     
-    int arraySize = sizeof(beatChanArray) / sizeof(CBeatChannel);
-    
-    for (int i = 0; i < arraySize; i++)
+    for (byte i = 0; i < c_cBeatChanArray; i++)
     {
         beatChanArray[i].AddSample(spectrumEnergy, fEndBeat);
     }
     
     if (fEndBeat)
-    {      
+    {
         lastIntanceTime = currentTime;
     }
 }
