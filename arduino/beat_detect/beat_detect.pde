@@ -1,4 +1,4 @@
-// Main Sustainable Lights Arduino entry point
+// Main LED Sound System Arduino entry point
 
 #include "WProgram.h"
 #include "spectrum.h"
@@ -15,10 +15,11 @@ const bool fDebugMode = false;
 unsigned long lastReadTime = 0;
 unsigned long lastIntanceTime = 0;
 
-CBeatChannel beatChanArray[] = 
+CBeatChannel beatChanArray[] =
 {
-    CBeatChannel(3, (SPECTRUM_BAND_1 | SPECTRUM_BAND_2)),
-    CBeatChannel(6, (SPECTRUM_BAND_4 | SPECTRUM_BAND_5)),
+    CBeatChannel(9, (SPECTRUM_BAND_1 | SPECTRUM_BAND_2)),
+    CBeatChannel(10, (SPECTRUM_BAND_4 | SPECTRUM_BAND_5)),
+    CBeatChannel(11, (SPECTRUM_BAND_6 | SPECTRUM_BAND_7)),
 };
 
 const byte c_cBeatChanArray = sizeof(beatChanArray) / sizeof(CBeatChannel);
