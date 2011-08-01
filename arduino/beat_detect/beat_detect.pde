@@ -17,7 +17,7 @@ unsigned long lastIntanceTime = 0;
 
 CBeatChannel beatChanArray[] =
 {
-    CBeatChannel(9, (SPECTRUM_BAND_1 | SPECTRUM_BAND_2)),
+    CBeatChannel(9, (SPECTRUM_BAND_1 | SPECTRUM_BAND_2 | SPECTRUM_BAND_3)),
     CBeatChannel(10, (SPECTRUM_BAND_4 | SPECTRUM_BAND_5)),
     CBeatChannel(11, (SPECTRUM_BAND_6 | SPECTRUM_BAND_7)),
 };
