@@ -1,29 +1,28 @@
 
+#pragma once
+
 #include "spectrum.h"
 
 // constants
 const unsigned int c_HistorySize = 20;
 
+class CLightDisplay;
+
 class CBeatChannel
 {
 public:
-    CBeatChannel(byte pin, byte spectrumFlags);
+    CBeatChannel();
     ~CBeatChannel(){}
+    
+    void SetSpectrumFlags(byte spectrumFlags) { _spectrumFlags = spectrumFlags; }
     
     void AddSample(unsigned long results[c_cBands], bool fEndBeat);
     void AddSample(unsigned long energy, bool fEndBeat);
     
+    void SetDisplay(CLightDisplay * pDisplay) { _pLightDisplay = pDisplay; }
+    
 private:
 
-    enum LightState
-    {
-        Light_Off = 0,
-        Light_Dim = 50,
-        Light_Bright = 255,
-    };
-
-    void UpdateDisplay(LightState lightState);
-    
     unsigned long AvgBeatEnergy() { return (_beatEnergySum/_beatSampleCount); }
 
     // data
@@ -35,10 +34,8 @@ private:
     
     byte _oldestHistoryIndex;
     
-    LightState _lightState;
-    
-    byte _pin; // pin to write beat signals to
     byte _spectrumFlags;
     
+    CLightDisplay * _pLightDisplay;
     
 };

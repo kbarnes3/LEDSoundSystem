@@ -1,4 +1,6 @@
 #include "WProgram.h"
+#include "spectrum.h"
+#include "LightDisplay.h"
 #include "BeatChannel.h"
 
 const float c_FullBeatFactor = 1.3;
@@ -6,11 +8,8 @@ const float c_MinBeatFactor = 1.2;
 
 const unsigned long c_minEnergy = 12*12;
 
-CBeatChannel::CBeatChannel(byte pin, byte spectrumFlags)
-{
-    _pin = pin;
-    _spectrumFlags = spectrumFlags;
-    
+CBeatChannel::CBeatChannel()
+{   
     // Initialize history to 0;
     int bufferSize = sizeof(unsigned long) * c_HistorySize;
     memset(_history, 0, bufferSize);
@@ -19,10 +18,6 @@ CBeatChannel::CBeatChannel(byte pin, byte spectrumFlags)
     _beatSampleCount = 0;
     
     _oldestHistoryIndex = 0;
-    
-    _lightState = Light_Off;
-    
-    pinMode(_pin, OUTPUT);
 }
 
 void CBeatChannel::AddSample(unsigned long results[c_cBands], bool fEndBeat)
@@ -64,7 +59,7 @@ void CBeatChannel::AddSample(unsigned long energy, bool fEndBeat)
             state = (beatFactor > c_FullBeatFactor) ? Light_Bright : Light_Dim;
         }
         
-        UpdateDisplay(state);
+        _pLightDisplay->UpdateDisplay(state);
         
         _historySum += _beatEnergySum;
         _historySum -= _history[_oldestHistoryIndex];
@@ -81,14 +76,5 @@ void CBeatChannel::AddSample(unsigned long energy, bool fEndBeat)
         
         _beatEnergySum = 0;
         _beatSampleCount = 0;
-    }
-}
-
-void CBeatChannel::UpdateDisplay(LightState lightStateNew)
-{
-    if (lightStateNew != _lightState)
-    {        
-        analogWrite(_pin, lightStateNew);
-        _lightState = lightStateNew;
     }
 }
