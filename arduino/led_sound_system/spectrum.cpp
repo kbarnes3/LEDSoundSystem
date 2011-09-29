@@ -1,12 +1,8 @@
 // Utilities for interacting with a spectrum shield
 
 #include "WProgram.h"
+#include "Pins.h"
 #include "spectrum.h"
-
-const byte c_pinSpectrumStrobe = 4;
-const byte c_pinSpectrumReset = 5;
-const byte c_apinSpectrumLeft = 0;
-const byte c_apinSpectrumRight = 1;
 
 const int   c_maxAnalogRead = 1023;
 const int   c_maxByte = 255; 
