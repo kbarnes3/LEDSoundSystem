@@ -14,8 +14,8 @@ const byte c_SpectrumFlagsAll = SPECTRUM_BAND_1 | SPECTRUM_BAND_2 | SPECTRUM_BAN
 
 const bool fDebugMode = false;
 
-unsigned long lastReadTime = 0;
 unsigned long lastIntanceTime = 0;
+bool g_fButtonDown = false;
 
 CBeatChannel beatChanArray[3];
 
@@ -30,6 +30,8 @@ byte cBeatChannelsUsed;
 void setup()
 {
     byte mode = 0;
+
+    pinMode(c_pinPushButton, INPUT);
 
     if (mode == 0)
     {
@@ -73,11 +75,19 @@ void loop()
 {
     unsigned long currentTime = micros();
 
+    int pushButton = digitalRead(c_pinPushButton);
+    if (g_fButtonDown && (pushButton == LOW))
+    {
+        // The button was released, switch modes
+        g_fButtonDown = false;
+    }
+    else if (pushButton == HIGH)
+    {
+        g_fButtonDown = true;
+    }
+
     unsigned long spectrumEnergy[c_cBands];
     SampleSpectrum(c_SpectrumFlagsAll, spectrumEnergy);
-
-    // Record the time of the last sample
-    lastReadTime = currentTime;
 
     unsigned long elapsedTime = (currentTime - lastIntanceTime);
 
