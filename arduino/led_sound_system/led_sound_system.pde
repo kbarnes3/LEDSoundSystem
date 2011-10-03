@@ -14,6 +14,10 @@ const byte c_SpectrumFlagsAll = SPECTRUM_BAND_1 | SPECTRUM_BAND_2 | SPECTRUM_BAN
 
 const bool fDebugMode = false;
 
+// Forward declares
+void ToggleMode();
+
+DisplayMode::Enum g_eDisplayMode = DisplayMode::Initial;
 unsigned long lastIntanceTime = 0;
 bool g_fButtonDown = false;
 
@@ -24,7 +28,6 @@ CStandardDisplay standardDisplayArray[3];
 
 CLightCycleDisplay cycleLightDisplay;
 
-const byte c_cBeatChanArray = sizeof(beatChanArray) / sizeof(CBeatChannel);
 byte cBeatChannelsUsed;
 
 void setup()
@@ -32,6 +35,8 @@ void setup()
     byte mode = 0;
 
     pinMode(c_pinPushButton, INPUT);
+
+    ToggleMode();
 
     if (mode == 0)
     {
@@ -104,4 +109,25 @@ void loop()
     }
 }
 
+void ToggleMode()
+{
+    switch (g_eDisplayMode)
+    {
+        case DisplayMode::Initial:
+        {
+            g_eDisplayMode = DisplayMode::Standard;
+            break;
+        }
+        case DisplayMode::Standard:
+        {
+            g_eDisplayMode = DisplayMode::Cycle;
+            break;
+        }
+        case DisplayMode::Cycle:
+        {
+            g_eDisplayMode = DisplayMode::Standard;
+            break;
+        }
+    }
+}
 
