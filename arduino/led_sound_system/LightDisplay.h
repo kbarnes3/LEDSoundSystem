@@ -8,13 +8,12 @@ enum LightState
     Light_Bright = 255,
 };
 
-class CLightDisplay
+struct ILightDisplay
 {
-public:
-    virtual void UpdateDisplay(LightState lightStateNew);
+    virtual void UpdateDisplay(LightState lightStateNew) = 0;
 };
 
-class CStandardDisplay : public CLightDisplay
+class CStandardDisplay : public ILightDisplay
 {
 public:
     CStandardDisplay(){}
@@ -27,7 +26,7 @@ private:
     LightState _lightState;
 };
 
-class CLightCycleDisplay : public CLightDisplay
+class CLightCycleDisplay : public ILightDisplay
 {
 public:
     CLightCycleDisplay(){};
