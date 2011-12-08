@@ -1,6 +1,6 @@
 // Utilities for interacting with a spectrum shield
 
-#include "WProgram.h"
+#include "Arduino.h"
 #include "Pins.h"
 #include "spectrum.h"
 

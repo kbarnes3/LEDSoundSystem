@@ -1,6 +1,6 @@
 // Main LED Sound System Arduino entry point
 
-#include "WProgram.h"
+#include "Arduino.h"
 #include "Pins.h"
 #include "spectrum.h"
 #include "LightDisplay.h"

@@ -1,4 +1,4 @@
-#include "WProgram.h"
+#include "Arduino.h"
 #include "LightDisplay.h"
 
 void CStandardDisplay::SetPin(byte pin)
