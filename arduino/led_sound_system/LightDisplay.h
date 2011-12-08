@@ -14,6 +14,7 @@ namespace DisplayMode
         Initial,
         Standard,
         Cycle,
+        AlwaysOn,
     };
 }
 
@@ -51,5 +52,18 @@ public:
 private:
     byte _pinArray[c_cCycleLights];
     byte _curPinIndex;
+};
+
+class CLightAlwaysOn : public ILightDisplay
+{
+public:
+    CLightAlwaysOn(){};
+
+    void SetPins(const byte pinArray[c_cCycleLights]);
+    virtual void UpdateDisplay(LightState lightStateNew);
+    virtual void Reset();
+
+private:
+    byte _pinArray[c_cCycleLights];
 };
 

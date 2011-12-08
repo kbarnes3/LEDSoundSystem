@@ -74,3 +74,29 @@ void CLightCycleDisplay::Reset()
     analogWrite(pin, Light_Bright);
 }
 
+void CLightAlwaysOn::SetPins(const byte pinArray[c_cCycleLights])
+{
+
+    memcpy(_pinArray, pinArray, sizeof(_pinArray));
+
+    for (int i = 0; i < c_cCycleLights; i++)
+    {
+        pinMode(pinArray[i], OUTPUT);
+    }
+}
+
+void CLightAlwaysOn::UpdateDisplay(LightState lightStateNew)
+{
+}
+
+void CLightAlwaysOn::Reset()
+{
+    byte pin = 0;
+    // Turn on all the lights
+    for (int i = 0; i < c_cCycleLights; i++)
+    {
+        pin = _pinArray[i];
+        analogWrite(pin, Light_Bright);
+    }
+}
+

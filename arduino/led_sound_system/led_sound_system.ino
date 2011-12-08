@@ -25,6 +25,8 @@ CStandardDisplay standardDisplayArray[3];
 
 CLightCycleDisplay cycleLightDisplay;
 
+CLightAlwaysOn alwaysOnDisplay;
+
 byte g_cBeatChannelsUsed;
 
 void setup()
@@ -46,6 +48,9 @@ void setup()
 
     // Lights cycle over one part of the spectrum
     cycleLightDisplay.SetPins(pins);
+
+    // Lights always on
+    alwaysOnDisplay.SetPins(pins);
 
     ToggleMode();
 
@@ -92,7 +97,7 @@ void ToggleMode()
     {
         case DisplayMode::Initial:
         {
-            g_eDisplayMode = DisplayMode::Standard;
+            g_eDisplayMode = DisplayMode::AlwaysOn;
             break;
         }
         case DisplayMode::Standard:
@@ -101,6 +106,11 @@ void ToggleMode()
             break;
         }
         case DisplayMode::Cycle:
+        {
+            g_eDisplayMode = DisplayMode::AlwaysOn;
+            break;
+        }
+        case DisplayMode::AlwaysOn:
         {
             g_eDisplayMode = DisplayMode::Standard;
             break;
@@ -140,6 +150,14 @@ void ResetBeatChannels()
             beatChanArray[0].SetSpectrumFlags(SPECTRUM_BAND_1 | SPECTRUM_BAND_2);
 
             g_cBeatChannelsUsed = 1;
+            break;
+        }
+        case DisplayMode::AlwaysOn:
+        {
+            // Lights cycle over one part of the spectrum
+            alwaysOnDisplay.Reset();
+
+            g_cBeatChannelsUsed = 0;
             break;
         }
     }
