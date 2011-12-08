@@ -62,7 +62,7 @@ void CLightCycleDisplay::Reset()
     // Turn off all the lights
     for (int i = 0; i < c_cCycleLights; i++)
     {
-        pin = _pinArray[1];
+        pin = _pinArray[i];
         analogWrite(pin, Light_Off);
     }
 
