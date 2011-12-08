@@ -20,22 +20,21 @@ void CStandardDisplay::UpdateDisplay(LightState lightStateNew)
 
 void CStandardDisplay::Reset()
 {
-    UpdateDisplay(Light_Off);
+    analogWrite(_pin, Light_Off);
+    _lightState = Light_Off;
 }
 
-void CLightCycleDisplay::SetPins(const byte pinArray[3])
+void CLightCycleDisplay::SetPins(const byte pinArray[c_cCycleLights])
 {
 
-    memcpy(_pinArray, pinArray, 3 * sizeof(byte));
+    memcpy(_pinArray, pinArray, sizeof(_pinArray));
 
-    int len = 3;
-    Serial.println(len);
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i < c_cCycleLights; i++)
     {
         pinMode(pinArray[i], OUTPUT);
     }
 
-    _curPinIndex = len - 1;
+    _curPinIndex = c_cCycleLights - 1;
 }
 
 void CLightCycleDisplay::UpdateDisplay(LightState lightStateNew)
@@ -48,27 +47,30 @@ void CLightCycleDisplay::UpdateDisplay(LightState lightStateNew)
 
         // Find next light
         _curPinIndex++;
-        _curPinIndex %= 3;
+        _curPinIndex %= c_cCycleLights;
 
         // Turn on new light
         pin = _pinArray[_curPinIndex];
         analogWrite(pin, Light_Bright);
 
     }
-    // move to next light
 }
 
 void CLightCycleDisplay::Reset()
 {
-        // Turn off old light
-        byte pin = _pinArray[_curPinIndex];
+    byte pin = 0;
+    // Turn off all the lights
+    for (int i = 0; i < c_cCycleLights; i++)
+    {
+        pin = _pinArray[1];
         analogWrite(pin, Light_Off);
+    }
 
-        // Set the first light to be the light that is on
-        _curPinIndex = 0;
+    // Set the first light to be the light that is on
+    _curPinIndex = 0;
 
-        // Turn on first light
-        pin = _pinArray[_curPinIndex];
-        analogWrite(pin, Light_Bright);
+    // Turn on first light
+    pin = _pinArray[_curPinIndex];
+    analogWrite(pin, Light_Bright);
 }
 

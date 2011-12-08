@@ -1,4 +1,3 @@
-
 #pragma once
 
 enum LightState
@@ -17,6 +16,8 @@ namespace DisplayMode
         Cycle,
     };
 }
+
+const size_t c_cCycleLights = 3;
 
 struct ILightDisplay
 {
@@ -43,12 +44,12 @@ class CLightCycleDisplay : public ILightDisplay
 public:
     CLightCycleDisplay(){};
 
-    void SetPins(const byte pinArray[3]);
+    void SetPins(const byte pinArray[c_cCycleLights]);
     virtual void UpdateDisplay(LightState lightStateNew);
     virtual void Reset();
 
 private:
-    byte _pinArray[3];
+    byte _pinArray[c_cCycleLights];
     byte _curPinIndex;
 };
 
