@@ -20,6 +20,7 @@ public:
     void AddSample(unsigned long energy, bool fEndBeat);
 
     void SetDisplay(ILightDisplay * pDisplay) { _pLightDisplay = pDisplay; }
+    void Reset();
 
 private:
 

@@ -8,16 +8,11 @@ const float c_MinBeatFactor = 1.2;
 
 const unsigned long c_minEnergy = 12*12;
 
-CBeatChannel::CBeatChannel()
-{   
-    // Initialize history to 0;
-    int bufferSize = sizeof(unsigned long) * c_HistorySize;
-    memset(_history, 0, bufferSize);
-    
-    _beatEnergySum = 0;
-    _beatSampleCount = 0;
-    
-    _oldestHistoryIndex = 0;
+CBeatChannel::CBeatChannel() :
+    _spectrumFlags(0),
+    _pLightDisplay(NULL)
+{
+    Reset();
 }
 
 void CBeatChannel::AddSample(unsigned long results[c_cBands], bool fEndBeat)
@@ -78,3 +73,16 @@ void CBeatChannel::AddSample(unsigned long energy, bool fEndBeat)
         _beatSampleCount = 0;
     }
 }
+
+void CBeatChannel::Reset()
+{
+    // Initialize history to 0;
+    memset(_history, 0, sizeof(_history));
+    _historySum = 0;
+
+    _beatEnergySum = 0;
+    _beatSampleCount = 0;
+
+    _oldestHistoryIndex = 0;
+}
+

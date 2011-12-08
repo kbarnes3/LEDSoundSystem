@@ -140,5 +140,10 @@ void ResetBeatChannels()
             g_cBeatChannelsUsed = 1;
         }
     }
+
+    for (size_t i = 0; i < g_cBeatChannelsUsed; i++)
+    {
+        beatChanArray[i].Reset();
+    }
 }
 
