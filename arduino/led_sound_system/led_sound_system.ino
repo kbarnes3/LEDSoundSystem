@@ -6,13 +6,13 @@
 #include "LightDisplay.h"
 #include "BeatChannel.h"
 
+#define DEBUG_MODE false
+
 // Constants
 const unsigned int c_SampleInstance = 50000; // micro-seconds (5/100 of a second)
 
 const byte c_SpectrumFlagsAll = SPECTRUM_BAND_1 | SPECTRUM_BAND_2 | SPECTRUM_BAND_3 |
     SPECTRUM_BAND_4 | SPECTRUM_BAND_5 | SPECTRUM_BAND_6 | SPECTRUM_BAND_7;
-
-const bool fDebugMode = false;
 
 DisplayMode::Enum g_eDisplayMode = DisplayMode::Initial;
 unsigned long lastIntanceTime = 0;
@@ -32,9 +32,14 @@ void setup()
     byte mode = 0;
     byte pins[3] = { c_pinLight1, c_pinLight2, c_pinLight3 };
 
+    if (DEBUG_MODE)
+    {
+        Serial.begin(9600);
+    }
+
     pinMode(c_pinPushButton, INPUT);
 
-    // Standard mode.  One light for part of the sound spectrum.
+    // Standard mode.  One light per part of the sound spectrum.
     standardDisplayArray[0].SetPin(c_pinLight1);
     standardDisplayArray[1].SetPin(c_pinLight2);
     standardDisplayArray[2].SetPin(c_pinLight3);
@@ -45,11 +50,6 @@ void setup()
     ToggleMode();
 
     SetupSpectrum();
-
-    if (fDebugMode)
-    {
-        Serial.begin(9600);
-    }
 }
 
 void loop()
@@ -116,7 +116,7 @@ void ResetBeatChannels()
     {
         case DisplayMode::Standard:
         {
-            // Standard mode.  One light for part of the sound spectrum.
+            // Standard mode.  One light per part of the sound spectrum.
             standardDisplayArray[0].Reset();
             beatChanArray[0].SetDisplay(&standardDisplayArray[0]);
             beatChanArray[0].SetSpectrumFlags(SPECTRUM_BAND_1 | SPECTRUM_BAND_2 | SPECTRUM_BAND_3);
@@ -130,14 +130,17 @@ void ResetBeatChannels()
             beatChanArray[2].SetSpectrumFlags(SPECTRUM_BAND_6 | SPECTRUM_BAND_7);
 
             g_cBeatChannelsUsed = 3;
+            break;
         }
         case DisplayMode::Cycle:
         {
+            // Lights cycle over one part of the spectrum
             cycleLightDisplay.Reset();
             beatChanArray[0].SetDisplay(&cycleLightDisplay);
             beatChanArray[0].SetSpectrumFlags(SPECTRUM_BAND_1 | SPECTRUM_BAND_2);
 
             g_cBeatChannelsUsed = 1;
+            break;
         }
     }
 
