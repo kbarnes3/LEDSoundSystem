@@ -14,9 +14,6 @@ const byte c_SpectrumFlagsAll = SPECTRUM_BAND_1 | SPECTRUM_BAND_2 | SPECTRUM_BAN
 
 const bool fDebugMode = false;
 
-// Forward declares
-void ToggleMode();
-
 DisplayMode::Enum g_eDisplayMode = DisplayMode::Initial;
 unsigned long lastIntanceTime = 0;
 bool g_fButtonDown = false;
@@ -28,45 +25,24 @@ CStandardDisplay standardDisplayArray[3];
 
 CLightCycleDisplay cycleLightDisplay;
 
-byte cBeatChannelsUsed;
+byte g_cBeatChannelsUsed;
 
 void setup()
 {
     byte mode = 0;
+    byte pins[3] = { c_pinLight1, c_pinLight2, c_pinLight3 };
 
     pinMode(c_pinPushButton, INPUT);
 
+    // Standard mode.  One light for part of the sound spectrum.
+    standardDisplayArray[0].SetPin(c_pinLight1);
+    standardDisplayArray[1].SetPin(c_pinLight2);
+    standardDisplayArray[2].SetPin(c_pinLight3);
+
+    // Lights cycle over one part of the spectrum
+    cycleLightDisplay.SetPins(pins);
+
     ToggleMode();
-
-    if (mode == 0)
-    {
-        // Standard mode.  One light for part of the sound spectrum.
-
-        standardDisplayArray[0].SetPin(c_pinLight1);
-        beatChanArray[0].SetDisplay(&standardDisplayArray[0]);
-        beatChanArray[0].SetSpectrumFlags(SPECTRUM_BAND_1 | SPECTRUM_BAND_2 | SPECTRUM_BAND_3);
-
-        standardDisplayArray[1].SetPin(c_pinLight2);
-        beatChanArray[1].SetDisplay(&standardDisplayArray[1]);
-        beatChanArray[1].SetSpectrumFlags(SPECTRUM_BAND_4 | SPECTRUM_BAND_5);
-
-        standardDisplayArray[2].SetPin(c_pinLight3);
-        beatChanArray[2].SetDisplay(&standardDisplayArray[2]);
-        beatChanArray[2].SetSpectrumFlags(SPECTRUM_BAND_6 | SPECTRUM_BAND_7);
-
-        cBeatChannelsUsed = 3;
-    }
-    else
-    {
-        // Lights cycle over one part of the spectrum
-
-        byte pins[3] = { c_pinLight1, c_pinLight2, c_pinLight3 };
-        cycleLightDisplay.SetPins(pins);
-        beatChanArray[0].SetDisplay(&cycleLightDisplay);
-        beatChanArray[0].SetSpectrumFlags(SPECTRUM_BAND_1 | SPECTRUM_BAND_2);
-
-        cBeatChannelsUsed = 1;
-    }
 
     SetupSpectrum();
 
@@ -85,6 +61,7 @@ void loop()
     {
         // The button was released, switch modes
         g_fButtonDown = false;
+        ToggleMode();
     }
     else if (pushButton == HIGH)
     {
@@ -98,7 +75,7 @@ void loop()
 
     bool fEndBeat = (elapsedTime >= c_SampleInstance);
 
-    for (byte i = 0; i < cBeatChannelsUsed; i++)
+    for (byte i = 0; i < g_cBeatChannelsUsed; i++)
     {
         beatChanArray[i].AddSample(spectrumEnergy, fEndBeat);
     }
@@ -127,6 +104,40 @@ void ToggleMode()
         {
             g_eDisplayMode = DisplayMode::Standard;
             break;
+        }
+    }
+
+    ResetBeatChannels();
+}
+
+void ResetBeatChannels()
+{
+    switch (g_eDisplayMode)
+    {
+        case DisplayMode::Standard:
+        {
+            // Standard mode.  One light for part of the sound spectrum.
+            standardDisplayArray[0].Reset();
+            beatChanArray[0].SetDisplay(&standardDisplayArray[0]);
+            beatChanArray[0].SetSpectrumFlags(SPECTRUM_BAND_1 | SPECTRUM_BAND_2 | SPECTRUM_BAND_3);
+
+            standardDisplayArray[1].Reset();
+            beatChanArray[1].SetDisplay(&standardDisplayArray[1]);
+            beatChanArray[1].SetSpectrumFlags(SPECTRUM_BAND_4 | SPECTRUM_BAND_5);
+
+            standardDisplayArray[2].Reset();
+            beatChanArray[2].SetDisplay(&standardDisplayArray[2]);
+            beatChanArray[2].SetSpectrumFlags(SPECTRUM_BAND_6 | SPECTRUM_BAND_7);
+
+            g_cBeatChannelsUsed = 3;
+        }
+        case DisplayMode::Cycle:
+        {
+            cycleLightDisplay.Reset();
+            beatChanArray[0].SetDisplay(&cycleLightDisplay);
+            beatChanArray[0].SetSpectrumFlags(SPECTRUM_BAND_1 | SPECTRUM_BAND_2);
+
+            g_cBeatChannelsUsed = 1;
         }
     }
 }
